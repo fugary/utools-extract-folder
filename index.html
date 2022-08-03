@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>新建文件夹功能</title>
+    <link rel="stylesheet" href="./assets/bootstrap-nightshade.min.css"/>
+</head>
+<body>
+<div id="app" class="container pt-3">
+    <form autocomplete="off">
+        <div class="row">
+            <label for="folderName" class="col-sm-3 col-form-label">解散到：当前目录/</label>
+            <div class="col-sm-9">
+                <div class="input-group mb-3">
+                    <input type="text" v-model="folderName" class="form-control" id="folderName"
+                           placeholder="如果想要解散到当前目录下的子目录，输入子目录名">
+                </div>
+            </div>
+        </div>
+        <div class="pb-3 row ps-2">
+            <div class="form-check form-switch">
+                <input class="form-check-input" v-model="releaseSubFolders" type="checkbox" role="switch"
+                       id="releaseSubFolders" :checked="releaseSubFolders">
+                <label class="form-check-label" for="releaseSubFolders">
+                    <span v-if="releaseSubFolders">解散所有子目录，提取所有文件</span>
+                    <span v-if="!releaseSubFolders">只解散一级目录，子目录将原样移出来</span>
+                </label>
+            </div>
+        </div>
+        <div class="pb-3 row ps-2">
+            <div class="form-check form-switch">
+                <input class="form-check-input" v-model="renameDuplicateFiles" type="checkbox" role="switch"
+                       id="renameDuplicateFiles" :checked="renameDuplicateFiles">
+                <label class="form-check-label" for="renameDuplicateFiles">
+                    <span v-if="renameDuplicateFiles">重复的提取文件将重命名，添加"__extracted"后缀</span>
+                    <span v-if="!renameDuplicateFiles">重复提取文件将覆盖现有同名文件</span>
+                </label>
+            </div>
+        </div>
+        <div class="alert alert-danger" role="alert" v-if="!filesData.length">
+            请先选择文件夹之后在执行解散文件夹操作
+        </div>
+        <div class="mb-3 row">
+            <div class="col-sm-3">
+                <button type="button" class="btn btn-primary" @click="releaseFolderFile()"
+                        :disabled="!filesData.length">解散文件夹
+                </button>
+            </div>
+        </div>
+    </form>
+    <table class="table table-striped table-hover" v-if="filesData.length">
+        <caption></caption>
+        <thead>
+        <tr>
+            <th scope="col" style="width: 50px;">#</th>
+            <th scope="col" style="width: auto;">文件完整路径</th>
+            <th scope="col" style="width: 80px;">类型</th>
+            <th scope="col" style="width: 80px;">操作</th>
+        </tr>
+        </thead>
+        <tr :key="index" v-for="(file, index) in filesData">
+            <td>{{index + 1}}</td>
+            <td>{{file.path}}</td>
+            <td>
+                <span class="badge bg-success" v-if="file.isDirectory">目录</span>
+                <span class="badge bg-primary" v-if="file.isFile">文件</span>
+            </td>
+            <td>
+                <button type="button" class="btn btn-danger btn-sm" @click="removeFileFromList(file)">移除</button>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+<script type="text/javascript" src="./assets/vue.global.prod.js"></script>
+<script type="text/javascript" src="./assets/index.js"></script>
+
+</html>

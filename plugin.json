@@ -1,0 +1,20 @@
+{
+	"main": "index.html",
+	"logo": "logo.png",
+	"preload": "preload.js",
+	"features": [
+		{
+			"code": "解散文件夹",
+			"explain": "选中文件夹并自动提取文件到当前文件夹",
+			"cmds": [
+				"解散文件夹",
+				{
+					"type": "files",
+					"label": "解散文件夹",
+					"fileType": "directory",
+					"minLength": 1
+				}
+			]
+		}
+	]
+}
