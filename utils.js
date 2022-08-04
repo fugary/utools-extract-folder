@@ -53,6 +53,10 @@ const moveOrCopyFile = function (files, dir, copy, checkFileFunc) {
 const releaseFolderFile = function (folders, dir, releaseSubFolders, renameDuplicateFiles) {
     // 如果不是绝对路径，根据文件转换成绝对路径
     dir = toAbsoluteDir(dir, folders[0].path);
+    if(folders.length && !fs.existsSync(folders[0].path)){
+        utools.showNotification('文件夹不存在，不能执行解散操作');
+        throw new Error('Directory not exists!');
+    }
     folders.forEach(file => {
         if (file.isDirectory) {
             const subFiles = readDirFiles(file);

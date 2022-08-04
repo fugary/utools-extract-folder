@@ -18,6 +18,7 @@ window.onload = function () {
             releaseFolderFile() {
                 window.releaseFolderFile(this.filesData, this.folderName, this.releaseSubFolders, this.renameDuplicateFiles);
                 utools.showNotification('文件夹解散完成');
+                this.clearFileNames();
             },
             removeFileFromList(file) {
                 const idx = this.filesData.indexOf(file);

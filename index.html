@@ -46,6 +46,10 @@
                         :disabled="!filesData.length">解散文件夹
                 </button>
             </div>
+            <div class="col-sm-3">
+                <button type="button" class="btn btn-danger" @click="clearFileNames()"
+                        :disabled="!filesData.length&&!folderName">清空选择</button>
+            </div>
         </div>
     </form>
     <table class="table table-striped table-hover" v-if="filesData.length">
