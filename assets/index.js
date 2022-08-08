@@ -19,6 +19,8 @@ window.onload = function () {
                 window.releaseFolderFile(this.filesData, this.folderName, this.releaseSubFolders, this.renameDuplicateFiles);
                 utools.showNotification('文件夹解散完成');
                 this.clearFileNames();
+                utools.outPlugin();
+                utools.hideMainWindow();
             },
             removeFileFromList(file) {
                 const idx = this.filesData.indexOf(file);
@@ -26,12 +28,12 @@ window.onload = function () {
             }
         },
         mounted() {
+            document.documentElement.className = utools.isDarkColors() ? 'dark' : ''
             utools.onPluginEnter(({ code, type, payload, optional }) => {
                 console.log('用户进入插件', code, type, payload)
                 if (type === "files") {
                     this.filesData = payload || []
                 }
-                document.documentElement.className = utools.isDarkColors() ? 'dark' : ''
             });
         }
     }).mount("#app");

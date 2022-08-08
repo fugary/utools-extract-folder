@@ -53,7 +53,7 @@ const moveOrCopyFile = function (files, dir, copy, checkFileFunc) {
 const releaseFolderFile = function (folders, dir, releaseSubFolders, renameDuplicateFiles) {
     // 如果不是绝对路径，根据文件转换成绝对路径
     dir = toAbsoluteDir(dir, folders[0].path);
-    if(folders.length && !fs.existsSync(folders[0].path)){
+    if (folders.length && !fs.existsSync(folders[0].path)) {
         utools.showNotification('文件夹不存在，不能执行解散操作');
         throw new Error('Directory not exists!');
     }
@@ -61,7 +61,7 @@ const releaseFolderFile = function (folders, dir, releaseSubFolders, renameDupli
         if (file.isDirectory) {
             const subFiles = readDirFiles(file);
             subFiles.filter(subFile => subFile.isFile).forEach(subFile => {
-                if(renameDuplicateFiles){
+                if (renameDuplicateFiles) {
                     customCheckAndMoveFile(subFile.path, path.join(dir, subFile.name));
                 } else {
                     customMoveFile(subFile.path, path.join(dir, subFile.name));
@@ -95,7 +95,13 @@ const customMoveFile = function (fromPath, toPath) {
     try {
         fs.renameSync(fromPath, toPath);
     } catch (e) {
-        utools.showNotification('不支持跨盘移动文件，请使用复制方式');
+        let msg = e.message;
+        if (e.code === 'EBUSY') {
+            msg = `文件正在使用中，${e.message}`;
+        } else if (e.code === 'EXDEV') {
+            msg = `不支持跨盘移动文件，${e.message}`;
+        }
+        utools.showNotification(msg);
         throw e;
     }
 }
