@@ -32,7 +32,7 @@
                 <input class="form-check-input" v-model="renameDuplicateFiles" type="checkbox" role="switch"
                        id="renameDuplicateFiles" :checked="renameDuplicateFiles">
                 <label class="form-check-label" for="renameDuplicateFiles">
-                    <span v-if="renameDuplicateFiles">重复的提取文件将重命名，添加"__extracted"后缀</span>
+                    <span v-if="renameDuplicateFiles">重复的提取文件将重命名为"文件夹__文件名"的形式，如果还是重名就添加"__extracted"后缀</span>
                     <span v-if="!renameDuplicateFiles">重复提取文件将覆盖现有同名文件</span>
                 </label>
             </div>

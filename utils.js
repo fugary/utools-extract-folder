@@ -62,7 +62,7 @@ const releaseFolderFile = function (folders, dir, releaseSubFolders, renameDupli
             const subFiles = readDirFiles(file);
             subFiles.filter(subFile => subFile.isFile).forEach(subFile => {
                 if (renameDuplicateFiles) {
-                    customCheckAndMoveFile(subFile.path, path.join(dir, subFile.name));
+                    customCheckAndMoveFileNew(subFile.path, path.join(dir, subFile.name), dir);
                 } else {
                     customMoveFile(subFile.path, path.join(dir, subFile.name));
                 }
@@ -70,7 +70,7 @@ const releaseFolderFile = function (folders, dir, releaseSubFolders, renameDupli
             const subFolders = subFiles.filter(subFile => subFile.isDirectory);
             if (subFolders.length) {
                 if (releaseSubFolders) {
-                    releaseFolderFile(subFolders, dir);
+                    releaseFolderFile(subFolders, dir, releaseSubFolders, renameDuplicateFiles);
                 } else {
                     moveOrCopyFile(subFolders, dir);
                 }
@@ -88,6 +88,20 @@ const customCheckAndMoveFile = function (fromPath, toPath) {
     } else {
         customMoveFile(fromPath, toPath);
     }
+}
+
+const customCheckAndMoveFileNew = function (fromPath, toPath, dir) {
+    if (fs.existsSync(toPath)) {
+        const pathInfo = path.parse(toPath);
+        let newFileName = fromPath.replace(dir, '').replace(/[:\/\\]/g, '__');
+        newFileName = newFileName.startsWith('__') ? newFileName.substring(2) : newFileName;
+        toPath = path.join(pathInfo.dir, newFileName)
+        if (fs.existsSync(toPath)) {
+            customCheckAndMoveFile(fromPath, toPath);
+            return;
+        }
+    }
+    customMoveFile(fromPath, toPath);
 }
 
 const customMoveFile = function (fromPath, toPath) {

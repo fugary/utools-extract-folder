@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/fugary/utools-extract-folder/issues"
   },
-  "homepage": "https://github.com/fugary/utools-extract-folder#readme"
+  "homepage": "https://github.com/fugary/utools-extract-folder#readme",
+  "devDependencies": {
+    "utools-api-types": "^3.0.0"
+  }
 }
