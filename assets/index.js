@@ -5,7 +5,8 @@ window.onload = function () {
                 filesData: [],
                 folderName: '',
                 releaseSubFolders: true,
-                renameDuplicateFiles: true
+                renameDuplicateFiles: true,
+                renameAllFiles: false
             }
         },
         methods: {
@@ -14,9 +15,10 @@ window.onload = function () {
                 this.folderName = '';
                 this.releaseSubFolders = true;
                 this.renameDuplicateFiles = true;
+                this.renameAllFiles = false;
             },
             releaseFolderFile() {
-                window.releaseFolderFile(this.filesData, this.folderName, this.releaseSubFolders, this.renameDuplicateFiles);
+                window.releaseFolderFile(this.filesData, this.folderName, this.releaseSubFolders, this.renameDuplicateFiles, this.renameAllFiles);
                 utools.showNotification('文件夹解散完成');
                 this.clearFileNames();
                 utools.outPlugin();

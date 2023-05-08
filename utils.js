@@ -50,7 +50,7 @@ const moveOrCopyFile = function (files, dir, copy, checkFileFunc) {
     });
 };
 
-const releaseFolderFile = function (folders, dir, releaseSubFolders, renameDuplicateFiles) {
+const releaseFolderFile = function (folders, dir, releaseSubFolders, renameDuplicateFiles, renameAllFiles) {
     // 如果不是绝对路径，根据文件转换成绝对路径
     dir = toAbsoluteDir(dir, folders[0].path);
     if (folders.length && !fs.existsSync(folders[0].path)) {
@@ -62,7 +62,7 @@ const releaseFolderFile = function (folders, dir, releaseSubFolders, renameDupli
             const subFiles = readDirFiles(file);
             subFiles.filter(subFile => subFile.isFile).forEach(subFile => {
                 if (renameDuplicateFiles) {
-                    customCheckAndMoveFileNew(subFile.path, path.join(dir, subFile.name), dir);
+                    customCheckAndMoveFileNew(subFile.path, path.join(dir, subFile.name), dir, renameAllFiles);
                 } else {
                     customMoveFile(subFile.path, path.join(dir, subFile.name));
                 }
@@ -70,7 +70,7 @@ const releaseFolderFile = function (folders, dir, releaseSubFolders, renameDupli
             const subFolders = subFiles.filter(subFile => subFile.isDirectory);
             if (subFolders.length) {
                 if (releaseSubFolders) {
-                    releaseFolderFile(subFolders, dir, releaseSubFolders, renameDuplicateFiles);
+                    releaseFolderFile(subFolders, dir, releaseSubFolders, renameDuplicateFiles, renameAllFiles);
                 } else {
                     moveOrCopyFile(subFolders, dir);
                 }
@@ -90,8 +90,8 @@ const customCheckAndMoveFile = function (fromPath, toPath) {
     }
 }
 
-const customCheckAndMoveFileNew = function (fromPath, toPath, dir) {
-    if (fs.existsSync(toPath)) {
+const customCheckAndMoveFileNew = function (fromPath, toPath, dir, renameAllFiles) {
+    if (fs.existsSync(toPath) || renameAllFiles) {
         const pathInfo = path.parse(toPath);
         let newFileName = fromPath.replace(dir, '').replace(/[:\/\\]/g, '__');
         newFileName = newFileName.startsWith('__') ? newFileName.substring(2) : newFileName;

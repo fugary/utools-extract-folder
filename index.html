@@ -37,6 +37,15 @@
                 </label>
             </div>
         </div>
+        <div class="pb-3 row ps-2">
+            <div class="form-check form-switch">
+                <input class="form-check-input" v-model="renameAllFiles" type="checkbox" role="switch"
+                       id="renameAllFiles" :checked="renameAllFiles">
+                <label class="form-check-label" for="renameDuplicateFiles">
+                    <span>{{renameAllFiles?'所有':'仅重复'}}文件将重命名为"文件夹__文件名"的形式</span>
+                </label>
+            </div>
+        </div>
         <div class="alert alert-danger" role="alert" v-if="!filesData.length">
             请先选择文件夹之后在执行解散文件夹操作
         </div>
