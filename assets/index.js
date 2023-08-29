@@ -1,12 +1,36 @@
 window.onload = function () {
+    const OPTIONS_KEY = 'releaseFolderOptions';
     Vue.createApp({
         data() {
+            let releaseSubFolders = true;
+            let renameDuplicateFiles = true;
+            let renameAllFiles = false;
+            const options = utools.dbStorage.getItem(OPTIONS_KEY);
+            if (options) {
+                releaseSubFolders = options.releaseSubFolders;
+                renameDuplicateFiles = options.renameDuplicateFiles;
+                renameAllFiles = options.renameAllFiles;
+            }
             return {
                 filesData: [],
                 folderName: '',
-                releaseSubFolders: true,
-                renameDuplicateFiles: true,
-                renameAllFiles: false
+                releaseSubFolders,
+                renameDuplicateFiles,
+                renameAllFiles
+            }
+        },
+        computed: {
+            releaseOptions({releaseSubFolders, renameDuplicateFiles, renameAllFiles}) {
+                return {
+                    releaseSubFolders,
+                    renameDuplicateFiles,
+                    renameAllFiles
+                }
+            }
+        },
+        watch: {
+            releaseOptions() {
+                this.saveOptions()
             }
         },
         methods: {
@@ -23,6 +47,14 @@ window.onload = function () {
                 this.clearFileNames();
                 utools.outPlugin();
                 utools.hideMainWindow();
+            },
+            saveOptions() {
+                const {releaseSubFolders, renameDuplicateFiles, renameAllFiles} = this
+                utools.dbStorage.setItem(OPTIONS_KEY, {
+                    releaseSubFolders,
+                    renameDuplicateFiles,
+                    renameAllFiles
+                })
             },
             removeFileFromList(file) {
                 const idx = this.filesData.indexOf(file);
